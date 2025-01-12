@@ -44,3 +44,5 @@ The cross validation is based on randomness, therefore it was lucky, that the fi
 After running the train process again for the second time, the model couldn't be trained in 1000 epochs, the `test.py` accuracy dropped to 70%,
 
 The best attempt to try to reproduce the first results was at epoch 544 with holdout accuracy of 93% and whole dataset accuracy of 91%
+
+This could be improved by using the K-fold cross-validation algorithm!!
