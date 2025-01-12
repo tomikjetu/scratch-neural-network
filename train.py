@@ -2,7 +2,7 @@ import numpy
 import pandas
 
 # Load data
-data = pandas.read_csv('IRIS.csv')
+data = pandas.read_csv('iris.csv')
 
 # Neural network parameters
 # Network of 4 inputs, 4 hidden, 3 outputs

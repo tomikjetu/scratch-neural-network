@@ -1,7 +1,27 @@
 # Neural Network from scratch
+> Implementation based on: Fundamentals of Neural Networks- Laurene Fausett
+
 A neural network from scratch using cross-validation using the [Iris Dataset](https://www.kaggle.com/datasets/himanshunakrani/iris-dataset)
 
-Implementation based on - Fundamentals of Neural Networks- Laurene Fausett
+
+The model has 4 inputs, 4 hidden nodes and 3 output nodes. The hidden layer and the output layer use sigmoid activation function.
+
+
+train.py
+``` 
+# Load data
+data = pandas.read_csv('iris.csv')
+
+# Neural network parameters
+# Network of 4 inputs, 4 hidden, 3 outputs
+weights = numpy.random.rand(4, 4)  # Input-to-hidden weights
+biases = numpy.random.rand(4)  # Hidden layer biases
+
+output_weights = numpy.random.rand(4, 3)  # Hidden-to-output weights
+output_biases = numpy.random.rand(3)  # Output layer biases
+
+learning_rate = 0.05
+```
 
 ## Experiments
 > Run test.py to reproduce with trained weights
