@@ -5,10 +5,10 @@ data = pandas.read_csv('IRIS.csv')
 
 def load_weights():
     global weights, biases, output_weights, output_biases
-    weights = numpy.load('weights.npy')
-    biases = numpy.load('biases.npy')
-    output_weights = numpy.load('output_weights.npy')
-    output_biases = numpy.load('output_biases.npy')
+    weights = numpy.load('weights/weights.npy')
+    biases = numpy.load('weights/biases.npy')
+    output_weights = numpy.load('weights/output_weights.npy')
+    output_biases = numpy.load('weights/output_biases.npy')
 
 def sigmoid(x):
     return 1 / (1 + numpy.exp(-x))

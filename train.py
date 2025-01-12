@@ -54,17 +54,17 @@ def forward(x):
     return sigmoid(numpy.dot(hidden, output_weights) + output_biases)
 
 def save_weights():
-    numpy.save('weights.npy', weights)
-    numpy.save('biases.npy', biases)
-    numpy.save('output_weights.npy', output_weights)
-    numpy.save('output_biases.npy', output_biases)
+    numpy.save('weights/weights.npy', weights)
+    numpy.save('weights/biases.npy', biases)
+    numpy.save('weights/output_weights.npy', output_weights)
+    numpy.save('weights/output_biases.npy', output_biases)
 
 def load_weights():
     global weights, biases, output_weights, output_biases
-    weights = numpy.load('weights.npy')
-    biases = numpy.load('biases.npy')
-    output_weights = numpy.load('output_weights.npy')
-    output_biases = numpy.load('output_biases.npy')
+    weights = numpy.load('weights/weights.npy')
+    biases = numpy.load('weights/biases.npy')
+    output_weights = numpy.load('weights/output_weights.npy')
+    output_biases = numpy.load('weights/output_biases.npy')
 
 def split_data(x, test_size=0.2):
     from random import sample
