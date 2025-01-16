@@ -4,7 +4,7 @@
 A neural network from scratch using cross-validation using the [Iris Dataset](https://www.kaggle.com/datasets/himanshunakrani/iris-dataset)
 
 
-The model has 4 inputs, 4 hidden nodes and 3 output nodes. The hidden layer and the output layer use sigmoid activation function. The consistency of training was increased after implementing the Nguyen Withdrow initialization and K-Fold algorithm using the Sklearn library. 
+The model has 4 inputs, 4 hidden nodes and 3 output nodes. The hidden layer and the output layer use sigmoid activation function. The consistency of training was increased after implementing the Nguyen Widrow initialization and K-Fold algorithm using the Sklearn library. 
 
 
 train.py
