@@ -1,16 +1,30 @@
 import numpy
 import pandas
+from sklearn.model_selection import KFold
+
+def nguyen_widrow_init(n_inputs, n_outputs):
+    weights = numpy.random.uniform(-1, 1, size=(n_inputs, n_outputs))
+    
+    # Normalize the weights
+    norm = numpy.linalg.norm(weights, axis=0)  
+    weights /= norm 
+    
+    # Scale by beta
+    beta = 0.7 * (n_outputs ** (1.0 / n_inputs))
+    weights *= beta
+
+    # Initialize biases (optional)
+    biases = numpy.random.uniform(-beta, beta, size=n_outputs)
+
+    return weights, biases
 
 # Load data
 data = pandas.read_csv('iris.csv')
 
 # Neural network parameters
 # Network of 4 inputs, 4 hidden, 3 outputs
-weights = numpy.random.rand(4, 4)  # Input-to-hidden weights
-biases = numpy.random.rand(4)  # Hidden layer biases
-
-output_weights = numpy.random.rand(4, 3)  # Hidden-to-output weights
-output_biases = numpy.random.rand(3)  # Output layer biases
+weights, biases = nguyen_widrow_init(4, 4)
+output_weights, output_biases = nguyen_widrow_init(4, 3)
 
 learning_rate = 0.05
 
@@ -19,7 +33,6 @@ def sigmoid(x):
     return 1 / (1 + numpy.exp(-x))
 
 def sigmoid_derivative(x):
-    # return sigmoid(x) * (1 - sigmoid(x))
     return x * (1 - x)
 
 # Training function
@@ -89,6 +102,46 @@ def split_data(x, test_size=0.2):
     return [train_inputs, train_targets], [test_inputs, test_targets]
 
 
+def k_fold_cross_validation(data, k=5):
+    inputs, targets = data
+    if len(inputs) != len(targets):
+        raise ValueError("The lengths of inputs and targets must be the same.")
+    
+    # Create KFold object
+    kf = KFold(n_splits=k, shuffle=True, random_state=42)
+
+    fold_accuracies = []  # Store accuracies for each fold
+    for fold, (train_index, valid_index) in enumerate(kf.split(inputs)):
+        train_inputs = [inputs[i] for i in train_index]
+        train_targets = [targets[i] for i in train_index]
+        valid_inputs = [inputs[i] for i in valid_index]
+        valid_targets = [targets[i] for i in valid_index]
+
+        validation_accuracy = 0
+        # Train the model on the training data
+        for epoch in range(150): 
+            for i in range(len(train_inputs)):
+                train(train_inputs[i], train_targets[i])
+
+            # Validate the model on the validation set
+            for i in range(len(valid_inputs)):
+                prediction = forward(valid_inputs[i])
+                if numpy.argmax(prediction) == numpy.argmax(valid_targets[i]):
+                    validation_accuracy += 1
+            validation_accuracy /= len(valid_inputs)
+            print(f"Fold {fold + 1}, Epoch {epoch}: Validation accuracy: {validation_accuracy}")
+            
+            if validation_accuracy == 1:  # Early stopping if perfect accuracy is achieved
+                break
+        
+        # Save fold accuracy
+        fold_accuracies.append(validation_accuracy)
+        print(f"Fold {fold + 1} complete. Accuracy: {validation_accuracy}")
+    
+    # Average accuracy across all folds
+    mean_accuracy = numpy.mean(fold_accuracies)
+    print(f"K-Fold Cross-Validation Complete. Mean Accuracy: {mean_accuracy}")
+    return mean_accuracy
 
 if  __name__ == '__main__':
     def get_target(species):
@@ -106,21 +159,7 @@ if  __name__ == '__main__':
     train_data, holdout_data = split_data(data, test_size=0.1)
 
 
-    # Training with validation
-    for epoch in range(1000):  
-        epoch_train, epoch_valid = split_data(train_data, test_size=0.2)
-        for i in range(len(epoch_train[0])):
-            train(epoch_train[0][i], epoch_train[1][i])
-
-        validation_accuracy = 0
-        for i in range(len(epoch_valid[0])):
-            prediction = forward(epoch_valid[0][i])
-            if numpy.argmax(prediction) == numpy.argmax(epoch_valid[1][i]):
-                validation_accuracy += 1
-        validation_accuracy /= len(epoch_valid[0])
-        print(f"Epoch {epoch}: Validation accuracy: {validation_accuracy}")
-        if validation_accuracy == 1:
-            break
+    k_fold_cross_validation(data, k=5)
 
     save_weights()
     print("Training complete.")
